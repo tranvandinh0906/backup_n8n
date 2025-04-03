@@ -676,7 +676,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Function to beautify JSON\nfunction beautifyJson(jsonString) {\n  try {\n    // Parse the JSON string\n    const jsonObject = JSON.parse(jsonString);\n\n    // Format the JSON with indentation\n    return jsonObject; // Return the parsed object directly\n  } catch (error) {\n    // Return the error message if JSON is invalid\n    return `Invalid JSON: ${error.message}`;\n  }\n}\n\n// Retrieve the JSON object from the input data\nconst input = $input.all()[0].json;\n\n// Extract the JSON string from the stdout field\nconst jsonString = input.stdout.match(/\\[{.*}\\]/s);\n\n// Check if a valid JSON string is found\nif (!jsonString) {\n  return {\n    json: {\n      error: \"No valid JSON string found in stdout.\"\n    }\n  };\n}\n\n// Beautify the JSON\nconst beautifiedJson = beautifyJson(jsonString[0]);\n\n// Output the beautified JSON, ensuring each entry is in an object with a 'json' key\nconst output = beautifiedJson.map(entry => ({ json: entry }));\n\n// Return the output\nreturn output;\n"
+        "jsCode": "// Hàm làm đẹp JSON\nfunction beautifyJson(jsonString) {\n  try {\n    // Phân tích chuỗi JSON\n    const jsonObject = JSON.parse(jsonString);\n\n    // Trả về đối tượng JSON đã phân tích (JavaScript sẽ tự động làm đẹp với dấu cách)\n    return jsonObject; \n  } catch (error) {\n    // Nếu có lỗi trong quá trình phân tích, trả về thông báo lỗi\n    return `JSON không hợp lệ: ${error.message}`;\n  }\n}\n\n// Lấy dữ liệu đầu vào\nconst input = $input.all()[0].json;\n\n// Trích xuất chuỗi JSON từ trường 'stdout' trong dữ liệu đầu vào\nconst jsonString = input.stdout.match(/\\[{.*}\\]/s);\n\n// Kiểm tra nếu không tìm thấy chuỗi JSON hợp lệ\nif (!jsonString) {\n  return {\n    json: {\n      error: \"Không tìm thấy chuỗi JSON hợp lệ trong stdout.\"\n    }\n  };\n}\n\n// Làm đẹp chuỗi JSON\nconst beautifiedJson = beautifyJson(jsonString[0]);\n\n// Trả về kết quả đã làm đẹp, mỗi mục trong chuỗi JSON sẽ nằm trong một đối tượng có trường 'json'\nconst output = beautifiedJson.map(entry => ({ json: entry }));\n\n// Trả về kết quả cuối cùng\nreturn output;\n"
       },
       "id": "a343534e-7bcd-4dfc-960e-6644df9011d5",
       "name": "JSON formatting",
@@ -794,8 +794,15 @@
       "recurrenceRules": []
     }
   },
-  "tags": [],
+  "tags": [
+    {
+      "createdAt": "2025-04-03T04:42:28.708Z",
+      "updatedAt": "2025-04-03T04:42:28.708Z",
+      "id": "NDfjzmO2xixBm0kw",
+      "name": "n8n"
+    }
+  ],
   "triggerCount": 1,
-  "updatedAt": "2025-04-03T06:42:44.000Z",
-  "versionId": "974ea183-71ff-49ca-8d01-249452eedd13"
+  "updatedAt": "2025-04-03T10:42:36.000Z",
+  "versionId": "daaafd8e-7001-4aea-849c-3ac1f43466ee"
 }
