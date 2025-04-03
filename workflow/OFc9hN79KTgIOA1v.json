@@ -1,0 +1,424 @@
+{
+  "active": false,
+  "connections": {
+    "n8n": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get folders": {
+      "main": [
+        [
+          {
+            "node": "Keep 10 backup items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "create new folder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create new folder": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If <10 items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "n8n",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep 10 backup items": {
+      "main": [
+        [
+          {
+            "node": "If <10 items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Delete old folder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete old folder": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-04-03T09:40:28.310Z",
+  "id": "OFc9hN79KTgIOA1v",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "WF - Backup lên gg drive",
+  "nodes": [
+    {
+      "parameters": {
+        "filters": {},
+        "requestOptions": {}
+      },
+      "id": "4d098b91-9404-46b2-86c3-cc33023db373",
+      "name": "n8n",
+      "type": "n8n-nodes-base.n8n",
+      "position": [
+        0,
+        0
+      ],
+      "retryOnFail": true,
+      "typeVersion": 1,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "78d6d47c-2a7e-4c8a-a6d8-dfb19e0a851a",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        380,
+        0
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "resource": "folder",
+        "name": "=Workflow-Backups-{{$now.toDateTime().setZone('Asia/Ho_Chi_Minh').format('dd-MM-yyyy-HH-mm')}}\n",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "12pcL23foLMbY2pmF7GRyPn3b-ZuVIpri",
+          "mode": "list",
+          "cachedResultName": "n8n_backups_alway_update",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/12pcL23foLMbY2pmF7GRyPn3b-ZuVIpri"
+        },
+        "options": {}
+      },
+      "id": "04944add-d322-490b-a4b2-c5e51ea95ad6",
+      "name": "create new folder",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        -480,
+        120
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "operation": "toJson",
+        "options": {
+          "format": true,
+          "fileName": "={{ $json.name + \".json\" }} "
+        }
+      },
+      "id": "10a3f4a7-99bd-46a5-86df-7cdcb689a1cd",
+      "name": "Convert to File",
+      "type": "n8n-nodes-base.convertToFile",
+      "position": [
+        600,
+        40
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "name": "={{ $('Loop Over Items').first().json.name + \".json\" }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $('create new folder').item.json.id }}"
+        },
+        "options": {}
+      },
+      "id": "7baec147-0a4d-42fc-967b-394fa07c47a7",
+      "name": "Google Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        800,
+        60
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 30
+            }
+          ]
+        }
+      },
+      "id": "60f52b1a-81fe-404e-8b6c-7ae89d220d30",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        -660,
+        120
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "resource": "fileFolder",
+        "queryString": "Workflow-Backups",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "12pcL23foLMbY2pmF7GRyPn3b-ZuVIpri",
+            "mode": "list",
+            "cachedResultName": "n8n_backups_alway_update",
+            "cachedResultUrl": "https://drive.google.com/drive/folders/12pcL23foLMbY2pmF7GRyPn3b-ZuVIpri"
+          }
+        },
+        "options": {}
+      },
+      "id": "17e40288-4922-414a-a7a6-6942143b6597",
+      "name": "Get folders",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        -260,
+        200
+      ],
+      "typeVersion": 3,
+      "retryOnFail": true,
+      "waitBetweenTries": 3000,
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5700a8c2-1e7c-4052-b1a8-b6b95e656339",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "=Không cần chuyển",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        200,
+        240
+      ],
+      "id": "e814aa52-ff08-46ae-91a6-958c18165941",
+      "name": "If <10 items"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "bb3e8355-814f-4330-8623-845eac6fba40",
+              "leftValue": "={{ $('create new folder').item.json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -260,
+        40
+      ],
+      "id": "9932454c-b4c9-4ca2-80ba-a23f2457e006",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "const allFolders = items;\n\n// Hàm trích xuất thời gian từ tên thư mục (dd-MM-yyyy-HH-mm)\nfunction extractTime(folderName) {\n    const match = folderName.match(/(\\d{2})-(\\d{2})-(\\d{4})-(\\d{2})-(\\d{2})/);\n    if (!match) return null;  \n    return new Date(`${match[3]}-${match[2]}-${match[1]}T${match[4]}:${match[5]}:00Z`);\n}\n\n// Lọc thư mục hợp lệ (bỏ qua thư mục có tên sai format)\nconst validFolders = allFolders.filter(folder => extractTime(folder.json.name) !== null);\n\n// Nếu tổng số thư mục < 10, trả về kết quả \"Không cần xóa\"\nif (validFolders.length < 10) {\n    return [{ json: { message: \"Không cần xóa\", status: true } }];\n}\n\n// Sắp xếp thư mục theo thời gian (cũ nhất -> mới nhất)\nvalidFolders.sort((a, b) => extractTime(a.json.name) - extractTime(b.json.name));\n\n// Giữ lại 10 thư mục mới nhất\nconst latestFolders = validFolders.slice(-10);\n\n// Lấy danh sách thư mục cũ cần xóa (tất cả trừ 10 thư mục mới nhất)\nconst oldFoldersToDelete = validFolders.slice(0, -10);\n\n// Nếu không có thư mục để xóa, vẫn trả về thông báo\nif (oldFoldersToDelete.length === 0) {\n    return [{ json: { message: \"Không cần xóa\", status: true } }];\n}\n\n// Trả về danh sách thư mục cũ để xóa\nreturn oldFoldersToDelete.map(folder => ({\n    json: {\n        id: folder.json.id,\n        name: folder.json.name\n    }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        220
+      ],
+      "id": "d05775b2-a7e1-421c-8af8-f8ca2f399059",
+      "name": "Keep 10 backup items"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        440,
+        320
+      ],
+      "id": "33eb9811-87e0-4752-a657-3e4f90969739",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "resource": "folder",
+        "operation": "deleteFolder",
+        "folderNoRootId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        700,
+        340
+      ],
+      "id": "cf901d66-8182-4056-b21e-51f5a02d9208",
+      "name": "Delete old folder"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-04-03T09:40:28.310Z",
+  "versionId": "629894db-5dd5-4352-a8f3-b4ef4cf5511d"
+}
