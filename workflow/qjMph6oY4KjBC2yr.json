@@ -1,0 +1,81 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "GitHub",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-04-03T12:01:38.018Z",
+  "id": "qjMph6oY4KjBC2yr",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "3a5b0329-20b6-4a7e-b229-ee84f758826c",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "resource": "workflow",
+        "operation": "get",
+        "workflowId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "owner": {
+          "__rl": true,
+          "value": "https://github.com/tranvandinh0906/backup_n8n",
+          "mode": "url"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "backup_n8n",
+          "mode": "list",
+          "cachedResultName": "backup_n8n",
+          "cachedResultUrl": "https://github.com/tranvandinh0906/backup_n8n"
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1,
+      "position": [
+        220,
+        0
+      ],
+      "id": "e60ed242-e069-42ef-83f3-93f9a52977e1",
+      "name": "GitHub",
+      "credentials": {
+        "githubApi": {
+          "id": "JKpvjUybyvaj5Mfz",
+          "name": "GitHub backup"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-04-03T12:01:38.018Z",
+  "versionId": "0fe71da4-41d1-466d-a406-6f2e4ef672ce"
+}
