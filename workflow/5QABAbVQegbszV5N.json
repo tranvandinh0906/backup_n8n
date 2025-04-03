@@ -578,7 +578,7 @@
     {
       "parameters": {
         "content": "## Main workflow loop",
-        "height": 435,
+        "height": 515,
         "width": 1489,
         "color": 7
       },
@@ -587,7 +587,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         260,
-        180
+        100
       ],
       "typeVersion": 1
     },
@@ -676,13 +676,13 @@
     },
     {
       "parameters": {
-        "jsCode": "// Function to beautify JSON\nfunction beautifyJson(jsonString) {\n  try {\n    // Parse the JSON string\n    const jsonObject = JSON.parse(jsonString);\n\n    // Format the JSON with indentation\n    return jsonObject; // Return the parsed object directly\n  } catch (error) {\n    // Return the error message if JSON is invalid\n    return `Invalid JSON: ${error.message}`;\n  }\n}\n\n// Retrieve the JSON object from the input data\nconst input = $input.all()[0].json;\n\n// Extract the JSON string from the stdout field\nconst jsonString = input.stdout.match(/\\[{.*}\\]/s);\n\n// Check if a valid JSON string is found\nif (!jsonString) {\n  return {\n    json: {\n      error: \"No valid JSON string found in stdout.\"\n    }\n  };\n}\n\n// Beautify the JSON\nconst beautifiedJson = beautifyJson(jsonString[0]);\n\n// Output the beautified JSON, ensuring each entry is in an object with a 'json' key\nconst output = beautifiedJson.map(entry => ({ json: entry }));\n\n// Return the output\nreturn output;\n"
+        "jsCode": "// Hàm làm đẹp JSON\nfunction beautifyJson(jsonString) {\n  try {\n    // Phân tích chuỗi JSON\n    const jsonObject = JSON.parse(jsonString);\n\n    // Trả về đối tượng JSON đã phân tích (JavaScript sẽ tự động làm đẹp với dấu cách)\n    return jsonObject; \n  } catch (error) {\n    // Nếu có lỗi trong quá trình phân tích, trả về thông báo lỗi\n    return `JSON không hợp lệ: ${error.message}`;\n  }\n}\n\n// Lấy dữ liệu đầu vào\nconst input = $input.all()[0].json;\n\n// Trích xuất chuỗi JSON từ trường 'stdout' trong dữ liệu đầu vào\nconst jsonString = input.stdout.match(/\\[{.*}\\]/s);\n\n// Kiểm tra nếu không tìm thấy chuỗi JSON hợp lệ\nif (!jsonString) {\n  return {\n    json: {\n      error: \"Không tìm thấy chuỗi JSON hợp lệ trong stdout.\"\n    }\n  };\n}\n\n// Làm đẹp chuỗi JSON\nconst beautifiedJson = beautifyJson(jsonString[0]);\n\n// Trả về kết quả đã làm đẹp, mỗi mục trong chuỗi JSON sẽ nằm trong một đối tượng có trường 'json'\nconst output = beautifiedJson.map(entry => ({ json: entry }));\n\n// Trả về kết quả cuối cùng\nreturn output;\n"
       },
       "id": "76b6bcd1-3d9c-4baf-aaed-9e22b1538fd0",
       "name": "JSON formatting",
       "type": "n8n-nodes-base.code",
       "position": [
-        680,
+        740,
         360
       ],
       "typeVersion": 2
@@ -735,7 +735,7 @@
       "credentials": {
         "telegramApi": {
           "id": "OcRPzTFrrHbXXaiH",
-          "name": "backup_n8n_dinhtranmmo_bot"
+          "name": "@backup_n8n_dinhtranmmo_bot"
         }
       }
     },
@@ -792,6 +792,9 @@
   "staticData": {
     "node:Schedule Trigger": {
       "recurrenceRules": []
+    },
+    "node:Schedule Trigger1": {
+      "recurrenceRules": []
     }
   },
   "tags": [
@@ -803,6 +806,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2025-04-03T06:13:30.000Z",
-  "versionId": "c9587091-51db-4521-b9a6-0e55f73efdc6"
+  "updatedAt": "2025-04-03T10:40:46.000Z",
+  "versionId": "c688a95d-0667-4568-bb20-8e24a81b51b8"
 }
